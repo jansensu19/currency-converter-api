@@ -1,0 +1,67 @@
+<div class="flex justify-center items-center my-10">
+  <div class="flex flex-col justify-center items-center">
+    <h3 class="text-5xl font-semibold my-10">Simple Currency Converter</h3>
+    <div class="w-full shadow-xl bg-white rounded-xl">
+      <div class="bg-blue-500 h-2 rounded-t-xl">&nbsp;</div>
+
+      <mat-progress-spinner class="flex justify-center items-center mx-auto my-5" *ngIf="isLoading" mode="indeterminate"></mat-progress-spinner>
+
+      <div *ngIf="!isLoading">
+        <div class="flex flex-col justify-center items-center mt-5">
+          <div class="my-5 text-4xl text-slate-400">Exchange Rate</div>
+          <div class="font-semibold text-5xl">{{result}} {{to.value}}</div>
+        </div>
+  
+        <div class="flex justify-center items-center mt-5 text-white">
+          <button [class]="apiMode === 'axios' ? 'bg-blue-500 hover:bg-blue-700' : 'bg-slate-200'" (click)="changeApiMode('axios')" class="w-40 rounded-3xl mx-3 p-3">Axios</button>
+          <button [class]="apiMode === 'httpclient' ? 'bg-blue-500 hover:bg-blue-700' : 'bg-slate-200'" (click)="changeApiMode('httpclient')" class="w-40 rounded-3xl mx-3 p-3">HTTPClient</button>
+        </div>
+        
+        <div class="flex flex-col p-20">
+          <div class="mb-5">
+            <mat-label class="text-slate-500" for="amountInput">Amount</mat-label>
+            <mat-form-field class="w-full">
+              <input id="amountInput" type="number" [formControl]="amount" matInput appearance="outline" placeholder="Amount">
+            </mat-form-field>
+          </div>
+  
+          <div class="flex flex-row justify-between">
+            <div *ngIf="cityName">
+              <mat-label class="text-slate-500">From</mat-label>
+              <mat-form-field class="w-full">
+                <mat-select (selectionChange)="checkValue()" [formControl]="from">
+                  <mat-option value="">None</mat-option>
+                  <mat-option *ngFor="let currency of cityName | keyvalue" [value]="currency.key">
+                    {{ currency.value }} ({{ currency.key }})
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+  
+            <div class="flex justify-center items-center mx-5">
+              <mat-icon>swap_horiz</mat-icon>
+            </div>
+  
+            <div *ngIf="cityName">
+              <mat-label class="text-slate-500">To</mat-label>
+              <mat-form-field class="w-full">
+                <mat-select (selectionChange)="checkValue()" [formControl]="to">
+                  <mat-option value="">None</mat-option>
+                  <mat-option *ngFor="let currency of cityName | keyvalue" [value]="currency.key">
+                    {{ currency.value }} ({{ currency.key }})
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+  
+          <div class="mt-5">
+            <button [class]="disabledNone ? 'bg-slate-200' : 'bg-blue-500 hover:bg-blue-700'" [disabled]="disabledNone" (click)="apiMode === 'axios' ? convertCurrencyAxios() : convertCurrencyHttpClient()" class="w-full  py-5 text-white text-xl">CONVERT</button>
+          </div>
+  
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
